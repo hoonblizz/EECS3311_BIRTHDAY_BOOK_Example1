@@ -27,16 +27,17 @@ feature -- tests
 		local
 			feb17: BIRTHDAY
 			bb: BIRTHDAY_BOOK
+			bb_access: BIRTHDAY_BOOK_ACCESS
 			a: ARRAY[NAME]
 			l_name: NAME
 			l_birthday: BIRTHDAY
-			jack,jill,max: NAME
+			jack,jill,max,hoon,jason: NAME
 		do
 			comment("t1: test birthday book")
 			create jack.make ("Jack"); create jill.make ("Jill")
 			create max.make ("Max")
 			create feb17.make (02, 17) -- Feb 17
-			create bb.make
+			bb := bb_access.data
 			print("%NCreate Done...")
 			-- add birthdays for Jack and Jill
 			bb.put (jack, [14,01])  -- Jan 14
@@ -68,6 +69,14 @@ feature -- tests
 					bb.imp.has ([l_name, l_birthday])
 				end
 			end
+
+			create hoon.make ("Hoon"); create jason.make ("Jason")
+			
+			bb.put (hoon, [22,07])  -- Jan 14
+			bb.put (jason, [10,03])
+			print("%Nbb: " + bb.out)
+
+
 		end
 
 end

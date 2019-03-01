@@ -18,16 +18,14 @@ inherit
 			out
 		end
 
-create
-	make
+create {BIRTHDAY_BOOK_ACCESS} make
 
-feature {NONE, ES_TEST} -- implementation
+feature {BIRTHDAY_BOOK_ACCESS, ES_TEST} -- implementation
 
 	imp: ARRAY [TUPLE [name: NAME; bday: BIRTHDAY]]
 
 	make
 			-- create a birthday book
-
 		do
 			create imp.make_empty
 			imp.compare_objects
@@ -117,7 +115,9 @@ feature
 			--end
 		ensure
 			model_override:
-				model ~ (old model.deep_twin @<+ [a_name, d])
+				model ~ (old model.deep_twin).overriden_by ([a_name, d])
+			model_extended:
+				model ~ (old model.deep_twin).extended ([a_name, d])
 		end
 
 	remind (d: BIRTHDAY): ARRAY [NAME]
@@ -154,9 +154,9 @@ feature
 			--end
 		ensure
 			remind_count:
-				Result.count = (model @> (d)).count
+				Result.count = model.range_restricted_by (d).count --(model @> (d)).count
 			remind_model_range_restiction:
-				across (model @> (d)).domain as cr all
+				across model.range_restricted_by (d).domain as cr all
 					Result.has (cr.item)
 				end
 			model_unchanged:
